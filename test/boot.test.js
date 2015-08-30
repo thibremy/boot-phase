@@ -1,5 +1,8 @@
 import boot from '../lib/index';
-import { expect } from 'chai';
+import {
+  expect
+}
+from 'chai';
 
 describe('boot phase', () => {
 
@@ -96,6 +99,50 @@ describe('boot phase', () => {
 
     b.phase('middleware', function*() {
       test.middleware = true;
+    });
+
+    b.start(function*() {
+      return {
+        address: '127.0.0.1',
+        port: 3000,
+      }
+    }).then(server => {
+      expect(server).to.be.deep.equal({
+        address: '127.0.0.1',
+        port: 3000,
+      });
+      expect(test).to.be.deep.equal({
+        start: [true, true],
+        connection: true,
+        middleware: true
+      });
+      done();
+    }).catch(done);
+  });
+
+  it('phases without pre-phase', done => {
+    const test = {
+      start: [false, false],
+      connection: false,
+      middleware: false,
+    };
+
+    const b = boot();
+
+    b.phase('start', function*() {
+      test.start[0] = true;
+    });
+
+    b.phase('connection', function*() {
+      test.connection = true;
+    });
+
+    b.phase('middleware', function*() {
+      test.middleware = true;
+    });
+
+    b.phase('start', function*() {
+      test.start[1] = true;
     });
 
     b.start(function*() {
