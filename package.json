@@ -1,0 +1,54 @@
+{
+  "name": "boot-phase",
+  "version": "0.0.1",
+  "description": "Phase boot management with generator, use co",
+  "main": "dist/lib/index.js",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "test": "npm run build && mocha -R --harmony spec dist/test",
+    "build": "npm run build:lib && npm run build:test",
+    "build:lib": "mkdir -p dist/lib && babel lib --out-dir dist/lib",
+    "build:test": "mkdir -p dist/test && babel test --out-dir dist/test",
+    "prepublish": "npm run clean && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thibremy/boot-phase.git"
+  },
+  "keywords": [
+    "boot",
+    "generators",
+    "co"
+  ],
+  "author": {
+    "name": "Thibault REMY",
+    "url": "http://thibremy.ninja"
+  },
+  "babel": {
+    "nonStandard": false,
+    "optional": [
+      "runtime"
+    ]
+  },
+  "engines": {
+    "node": ">=0.12"
+  },
+  "files": [
+    "dist/lib",
+    "lib/"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thibremy/boot-phase/issues"
+  },
+  "homepage": "https://github.com/thibremy/boot-phase#readme",
+  "dependencies": {
+    "babel-runtime": "^5.8.20",
+    "co": "^4.6.0",
+    "debug": "^2.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5"
+  }
+}
