@@ -1,6 +1,6 @@
 {
   "name": "boot-phase",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Phase boot management with generator, use co",
   "main": "dist/lib/index.js",
   "scripts": {
