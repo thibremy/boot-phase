@@ -60,7 +60,7 @@ describe('boot phase', () => {
       res.forEach(r => {
         expect(r).to.have.all.keys([
           'phase',
-          'results',
+          'result',
         ]);
       });
       expect(test).to.be.deep.equal({
@@ -162,5 +162,45 @@ describe('boot phase', () => {
       });
       done();
     }).catch(done);
+  });
+
+  it('phases with context', done => {
+    const b = boot();
+
+    b.phase('start', function*() {
+      expect(this.phase).to.be.equal('start');
+      this.ctx.start = 'hello ';
+    });
+
+    b.phase('connection', function*() {
+      expect(this.phase).to.be.equal('connection');
+      this.ctx.start += 'small  ';
+    });
+
+    b.phase('middleware', function*() {
+      expect(this.phase).to.be.equal('middleware');
+      this.ctx.start += 'world !';
+    });
+
+    b.phase('start', function*() {
+      expect(this.phase).to.be.equal('start');
+      this.ctx.start += 'my ';
+    });
+
+    b.start(function*() {
+      expect(this.ctx.start).to.be.equal('hello my small  world !');
+    }).then(() => {
+      done();
+    }).catch(done);
+  });
+
+  it('throw when not valid generator', done => {
+    try {
+      const b = boot();
+      b.phase('start', 'toto');
+    } catch (err) {
+      done();
+    }
+    done();
   });
 });
